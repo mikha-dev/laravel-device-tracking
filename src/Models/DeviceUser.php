@@ -31,6 +31,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class DeviceUser extends Pivot
 {
 
+    protected $table = 'admin_device_users';
+    
     protected $casts = [
         'verified_at' => 'datetime',
         'reported_as_rogue_at' => 'datetime',
