@@ -20,4 +20,5 @@ return [
 
     // must implement: IvanoMatteo\LaravelDeviceTracking\DeviceHijackingDetector
     'hijacking_detector' => DeviceHijackingDetectorDefault::class,
+    'geoip_provider' => GeoIpProvider::class
 ];
