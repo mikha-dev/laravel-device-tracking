@@ -3,6 +3,7 @@
 namespace IvanoMatteo\LaravelDeviceTracking\Models;
 
 use App\User;
+use Dcat\Admin\Admin;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -90,7 +91,7 @@ class Device extends Model
 
     public function user()
     {
-        return $this->belongsToMany(static::getUserClass(), 'device_user')
+        return $this->belongsToMany(static::getUserClass(), 'admin_device_users')
             ->using(DeviceUser::class)
             ->withPivot([
                 'verified_at', 'name', 'reported_as_rogue_at', 'note', 'admin_note'
@@ -107,13 +108,13 @@ class Device extends Model
     public function currentUserStatus()
     {
         return $this->hasOne(DeviceUser::class)
-            ->where('user_id', '=', optional(Auth::user())->id);
+            ->where('user_id', '=', optional(Admin::user())->id);
     }
 
     public function isUsedBy($user_id)
     {
         return $this->user()
-            ->where('device_user.user_id', $user_id)->exists();
+            ->where('admin_device_users.user_id', $user_id)->exists();
     }
 
     public function isCurrentUserAttached()

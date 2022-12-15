@@ -3,8 +3,8 @@
 namespace IvanoMatteo\LaravelDeviceTracking\Http\Middleware;
 
 use Closure;
+use Dcat\Admin\Admin;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
 
 class DeviceTrackerMiddleware
 {
@@ -17,12 +17,12 @@ class DeviceTrackerMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $guard = Auth::guard('web');
+//        $guard = Auth::guard('admin');
 
-        if ($guard->check()) {
+        if (Admin::guard()->check()) {
             /** @var object */
-            $user = $guard->user();
-            
+            $user = Admin::user();
+
             if (!$user->deviceShouldBeDetected()) {
                 return $next($request);
             }

@@ -1,14 +1,24 @@
 <?php
 namespace IvanoMatteo\LaravelDeviceTracking;
 
-use Illuminate\Database\Eloquent\Model;
-use IvanoMatteo\LaravelDeviceTracking\Models\Device;
+use Torann\GeoIP\Facades\GeoIP;
 
-interface GeoIpProvider
+class GeoIpProvider implements GeoIpProviderInterface
 {
-    public function getCountry($ip);
-    public function getCountryIsoCode($ip);
-    public function getCity($ip);
-    public function getState($ip);
-    public function getCoord($ip);
+    public function getCountry($ip) {
+        return GeoIP::getLocation($ip)['country'];
+    }
+
+    public function getCountryIsoCode($ip) {
+        return GeoIP::getLocation($ip)['iso_code'];
+    }
+    public function getCity($ip) {
+        return GeoIP::getLocation($ip)['city'];
+    }
+    public function getState($ip) {
+        return GeoIP::getLocation($ip)['state'];
+    }
+    public function getCoord($ip) {
+        return GeoIP::getLocation($ip)['lat'];
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace IvanoMatteo\LaravelDeviceTracking;
 
-use hisorange\BrowserDetect\Contracts\ResultInterface;
+use Dcat\Admin\Admin;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +20,7 @@ use IvanoMatteo\LaravelDeviceTracking\Events\UserSeenFromUnverifiedDevice;
 use IvanoMatteo\LaravelDeviceTracking\Models\Device;
 use IvanoMatteo\LaravelDeviceTracking\Models\DeviceUser;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use hisorange\BrowserDetect\Contracts\ResultInterface;
 
 
 /**
@@ -121,7 +122,7 @@ class LaravelDeviceTracking
      */
     public function checkSessionDeviceHash()
     {
-        if (Auth::guard('web')->check()) {
+        if (Auth::guard('admin')->check()) {
 
             $sessionData = session(config('laravel-device-tracking.session_key'));
 
@@ -144,7 +145,7 @@ class LaravelDeviceTracking
      */
     public function setSessionDeviceHash()
     {
-        if (Auth::guard('web')->check()) {
+        if (Auth::guard('admin')->check()) {
             session([
                 config('laravel-device-tracking.session_key') => [
                     'current_md5' => $this->getRequestHash(),
@@ -224,7 +225,8 @@ class LaravelDeviceTracking
 
     public function flagCurrentAsVerified($name = null)
     {
-        if (Auth::check()) {
+        if (Admin::guard()->check()) {
+            //dd($this->detectFindAndUpdate()->currentUserStatus);
             $this->detectFindAndUpdate()->currentUserStatus
                 ->fill(['verified_at' => now(), 'name' => $name])
                 ->save();
@@ -237,7 +239,7 @@ class LaravelDeviceTracking
 
     public function flagCurrentAsRogue($note = null)
     {
-        if (Auth::check()) {
+        if (Admin::guard()->check()) {
             $device = $this->detectFindAndUpdate();
             $device->fill(['is_rogue_device' => true])
                 ->save();
@@ -314,10 +316,9 @@ class LaravelDeviceTracking
         }
 
         /** @var Model */
-        $user = Auth::user();
+        $user = Admin::user();
 
         $isDeviceJustCreated = false;
-
 
         if (!isset($this->currentDevice)) {
 
