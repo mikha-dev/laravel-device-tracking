@@ -47,6 +47,7 @@ class Device extends Model
     use SoftDeletes;
     protected static $class;
 
+    protected $table = 'admin_devices';
 
     protected $guarded = [];
     protected $casts = [
