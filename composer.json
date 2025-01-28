@@ -17,12 +17,19 @@
     ],
     "require": {
         "php": ">=8.0",
-        "hisorange/browser-detect": "^4.5"
+        "hisorange/browser-detect": "dev-stable"
     },
     "require-dev": {
         "orchestra/testbench": "^7.15",
         "phpunit/phpunit": "^9.5"
     },
+    "repositories": [
+    {
+        "type": "git",
+        "url": "https://github.com/mikha-dev/browser-detect",
+        "canonical": false
+    }
+    ],
     "autoload": {
         "psr-4": {
             "IvanoMatteo\\LaravelDeviceTracking\\": "src"
